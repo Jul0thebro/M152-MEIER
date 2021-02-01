@@ -7,11 +7,15 @@ Date : 25.01.2021
 */
 
 $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
+//$nom = $_
 
- //Crude qui ajoute des données à la base de donnée
- $req = $myDb->prepare("INSERT INTO nationalite(libelle, numContinent) VALUES(:libelle, :continent)");
- $req->bindParam(":libelle", $libelle);
- $req->bindParam(":continent", $continent);
+//Crude qui ajoute des données à la base de donnée
+/*$req = $myDb->prepare("INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:libelle, :continent)");
+ $req->bindParam(":nom", $nom);
+ $req->bindParam(":type", $type);*/
+
+$uploads_dir = 'assets/img';
+
 //move_uploaded_file($_GET['img'], $_FILES[''])
 ?>
 <!DOCTYPE html>
@@ -118,41 +122,53 @@ $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
                                 <div class="col-sm-5">
 
 
-
                                     <div class="well mt-5">
-                                        <form class="form-horizontal mt-5" role="form">
+                                        <form class="form-horizontal mt-5" role="form" method="POST" action="#" enctype="multipart/form-data">
                                             <h4>Poster</h4>
                                             <div class="form-group" style="padding:14px;">
+                                                <!-- Pour le texte -->
                                                 <textarea class="form-control" placeholder="Poster un message ..."></textarea>
                                             </div>
-                                            <button class="btn btn-primary pull-right" type="button">Post</button>
-                                            <ul class="list-inline">
-                                                <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
-                                                <li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li>
-                                                <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li>
-                                            </ul>
-                                        </form>
-                                    </div>
-
-
-                                  
-
-                                    <div class="well mt-5 pb-5">
-                                        <form method="POST" action="#" enctype="multipart/form-data">
-                                      
-                                            Sélectionner une image : <input type="file" multiple accept="image/*" name="image[]">
-                                            <!-- <textarea></textarea>-->
+                                            <!-- Envois les données -->
                                             <button class="btn btn-primary pull-right" type="submit">Post</button>
+                                            <!-- Pour les images -->
+                                            <input type="file" multiple accept="image/*" name="image[]">
                                         </form>
                                     </div>
-                                    <image src="assets/<?php echo $img;?>"></image>
+                                    
                                     <?php
-                                        var_dump($_FILES["image"]["name"]);
+                                    //Va nous permettre de download les fichiers upload
+                                    foreach ($_FILES["image"]["error"] as $key => $error) {
+                                        if ($error == UPLOAD_ERR_OK) {
+                                            $tmp_name = $_FILES["image"]["tmp_name"][$key];
+                                            // basename() peut empêcher les attaques de système de fichiers;
+                                            // la validation/assainissement supplémentaire du nom de fichier peut être approprié
+                                            $name = basename($_FILES["image"]["name"][$key]);
+                                            //PROBLEME de droit le dossier de sauvegarde qui est img n'accepte pas la sauvegarde
+                                            move_uploaded_file($tmp_name, "$uploads_dir/$name");
+                                        }
+                                    }
+                                    $nbImage = count($_FILES["image"]["name"]);
+                                    for ($i = 0; $i < $nbImage; $i++) {
+                                        $name = $_FILES["image"]["name"][$i];
+                                        echo " ";
+                                        echo $name;
+                                    }
+
+                                    //var_dump($_FILES["image"]["name"]);
+                                    //<image src="assets/<?php echo $img; ></image>
                                     ?>
 
 
-
-
+                                    <!--
+                                    <div class="well mt-5 pb-5">
+                                        <form method="POST" action="#" enctype="multipart/form-data">
+                                        
+                                            <input type="file" multiple accept="image/*" name="image[]">
+                                            <textarea></textarea>
+                                            <button class="btn btn-primary pull-right" type="submit">Post</button>
+                                        </form>
+                                    </div> -->
                                 </div>
                             </div>
                             <!--/row-->
