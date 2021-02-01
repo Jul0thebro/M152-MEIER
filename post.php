@@ -8,7 +8,11 @@ Date : 25.01.2021
 
 $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
 
-move_uploaded_file($_GET['img'], $_FILES[''])
+ //Crude qui ajoute des données à la base de donnée
+ $req = $myDb->prepare("INSERT INTO nationalite(libelle, numContinent) VALUES(:libelle, :continent)");
+ $req->bindParam(":libelle", $libelle);
+ $req->bindParam(":continent", $continent);
+//move_uploaded_file($_GET['img'], $_FILES[''])
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,15 +138,17 @@ move_uploaded_file($_GET['img'], $_FILES[''])
                                   
 
                                     <div class="well mt-5 pb-5">
-                                        <form action="" enctype="multipart/form-data">
+                                        <form method="POST" action="#" enctype="multipart/form-data">
                                       
-                                            Sélectionner une image : <input type="file" multiple accept="image/*" name="image">
-                                            <textarea></textarea>
-                                            <button class="btn btn-primary pull-right" type="button">Post</button>
+                                            Sélectionner une image : <input type="file" multiple accept="image/*" name="image[]">
+                                            <!-- <textarea></textarea>-->
+                                            <button class="btn btn-primary pull-right" type="submit">Post</button>
                                         </form>
                                     </div>
                                     <image src="assets/<?php echo $img;?>"></image>
-
+                                    <?php
+                                        var_dump($_FILES["image"]["name"]);
+                                    ?>
 
 
 
