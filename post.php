@@ -173,6 +173,7 @@ $nb = $req->execute();*/
                                             // la validation/assainissement supplémentaire du nom de fichier peut être approprié
                                             $name = basename($_FILES["image"]["name"][$key]);
                                             //PROBLEME de droit le dossier de sauvegarde qui est img n'accepte pas la sauvegarde
+                                            var_dump(is_writable($uploads_dir));
                                             move_uploaded_file($tmp_name, "$uploads_dir/$name");
                                         }
                                     }
