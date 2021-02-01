@@ -1,12 +1,26 @@
 <?php
-//Connexion à la base de données
-$dbName = "db_m152";
-$dbUser = "root";
-$dbPass = "julian2003";
-try {
-    $myDb = new PDO("mysql:host=127.0.0.1;dbname=$dbName;charset=utf8", $dbUser, $dbPass);
-    $myDb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo $e->getMessage();
-    $myDb = null;
+require 'constants.php';
+function dbTournament()
+{
+  static $dbc = null;
+
+  // Première visite de la fonction
+  if ($dbc == null) {
+    // Essaie le code ci-dessous
+    try {
+      $dbc = new PDO('mysql:host=' . HOST . ';dbname=' . DBNAME, DBUSER, DBPWD, array(
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+        PDO::ATTR_PERSISTENT => true
+      ));
+    }
+    // Si une exception est arrivée
+    catch (Exception $e) {
+      echo 'Erreur : ' . $e->getMessage() . '<br />';
+      echo 'N° : ' . $e->getCode();
+      // Quitte le script et meurt
+      die('Could not connect to MySQL');
+    }
+  }
+  // Pas d'erreur, retourne un connecteur
+  return $dbc;
 }

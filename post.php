@@ -5,16 +5,44 @@ Description :
 Version : v1.0
 Date : 25.01.2021
 */
+require "pdo-connexion.php";
 
+//Variables
 $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
-//$nom = $_
+$uploads_dir = 'assets/upload';
 
-//Crude qui ajoute des données à la base de donnée
-/*$req = $myDb->prepare("INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:libelle, :continent)");
- $req->bindParam(":nom", $nom);
- $req->bindParam(":type", $type);*/
 
-$uploads_dir = 'assets/img';
+function readTeamsTournament($idTournoi)
+{
+  static $ps = null;
+  $sql = 'SELECT equipes.nomEquipe FROM equipes, equipes_tournoi WHERE equipes.idEquipe = equipes_tournoi.idEquipe AND equipes_tournoi.idTournoi = :TOURNOI';
+
+  if ($ps == null) {
+    $ps = dbTournament()->prepare($sql);
+  }
+  $answer = false;
+  try {
+    $ps->bindParam(':TOURNOI', $idTournoi, PDO::PARAM_INT);
+
+    if ($ps->execute())
+      $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+  } catch (PDOException $e) {
+    echo $e->getMessage();
+  }
+  return $answer;
+}
+
+//Crude qui ajoute des données à la base de donnée, pour les posts, texte
+/*$req = $myDb->prepare("INSERT INTO post(commentaire, typeMedia) VALUES(:commentaire)");
+$req->bindParam(":commentaire", $commentaire);
+$nb = $req->execute();
+*/
+//Crude qui ajoute des données à la base de donnée, pour les images
+/*$req = $myDb->prepare("INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:nom, :types)");
+$req->bindParam(":nom", $nom);
+$req->bindParam(":types", $type);
+$nb = $req->execute();*/
+
 
 //move_uploaded_file($_GET['img'], $_FILES[''])
 ?>
@@ -135,7 +163,7 @@ $uploads_dir = 'assets/img';
                                             <input type="file" multiple accept="image/*" name="image[]">
                                         </form>
                                     </div>
-                                    
+
                                     <?php
                                     //Va nous permettre de download les fichiers upload
                                     foreach ($_FILES["image"]["error"] as $key => $error) {
