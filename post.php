@@ -9,49 +9,8 @@ require "pdo-connexion.php";
 
 //Variables
 $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
-$uploads_dir = 'assets/upload';
+$uploads_dir = 'assets/uploads';
 
-
-function addText($commentaire)
-{
-    static $ps = null;
-    $sql = 'INSERT INTO post(commentaire, typeMedia) VALUES(:commentaire)';
-
-    if ($ps == null) {
-        $ps = dbM152()->prepare($sql);
-    }
-    $answer = false;
-    try {
-        $ps->bindParam(":commentaire", $commentaire);
-
-        if ($ps->execute())
-            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-    return $answer;
-}
-
-function addImage($nom, $type)
-{
-    static $ps = null;
-    $sql = 'INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:nom, :types)';
-
-    if ($ps == null) {
-        $ps = dbM152()->prepare($sql);
-    }
-    $answer = false;
-    try {
-        $ps->bindParam(":nom", $nom);
-        $ps->bindParam(":types", $type);
-
-        if ($ps->execute())
-            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-    return $answer;
-}
 
 //move_uploaded_file($_GET['img'], $_FILES[''])
 ?>
@@ -185,10 +144,10 @@ function addImage($nom, $type)
                                             var_dump(is_writable($uploads_dir));
                                             echo $uploads_dir;
                                             //chmod() pour le changement de droit
-                                            if (chmod($uploads_dir, 0755)) {
+                                           /* if (chmod("$uploads_dir", 0755)) {
                                                 echo 'Permissions du fichier bien modifiées';
                                                 echo var_dump(is_writable($uploads_dir));
-                                            }
+                                            }*/
                                             move_uploaded_file($tmp_name, "$uploads_dir/$name");
                                         }
                                     }
