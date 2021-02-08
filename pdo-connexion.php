@@ -1,6 +1,6 @@
 <?php
 require 'constants.php';
-function dbTournament()
+function dbM152()
 {
   static $dbc = null;
 

@@ -12,37 +12,46 @@ $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
 $uploads_dir = 'assets/upload';
 
 
-function readTeamsTournament($idTournoi)
+function addText($commentaire)
 {
-  static $ps = null;
-  $sql = 'SELECT equipes.nomEquipe FROM equipes, equipes_tournoi WHERE equipes.idEquipe = equipes_tournoi.idEquipe AND equipes_tournoi.idTournoi = :TOURNOI';
+    static $ps = null;
+    $sql = 'INSERT INTO post(commentaire, typeMedia) VALUES(:commentaire)';
 
-  if ($ps == null) {
-    $ps = dbTournament()->prepare($sql);
-  }
-  $answer = false;
-  try {
-    $ps->bindParam(':TOURNOI', $idTournoi, PDO::PARAM_INT);
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
+        $ps->bindParam(":commentaire", $commentaire);
 
-    if ($ps->execute())
-      $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
-  } catch (PDOException $e) {
-    echo $e->getMessage();
-  }
-  return $answer;
+        if ($ps->execute())
+            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
 }
 
-//Crude qui ajoute des données à la base de donnée, pour les posts, texte
-/*$req = $myDb->prepare("INSERT INTO post(commentaire, typeMedia) VALUES(:commentaire)");
-$req->bindParam(":commentaire", $commentaire);
-$nb = $req->execute();
-*/
-//Crude qui ajoute des données à la base de donnée, pour les images
-/*$req = $myDb->prepare("INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:nom, :types)");
-$req->bindParam(":nom", $nom);
-$req->bindParam(":types", $type);
-$nb = $req->execute();*/
+function addImage($nom, $type)
+{
+    static $ps = null;
+    $sql = 'INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:nom, :types)';
 
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
+        $ps->bindParam(":nom", $nom);
+        $ps->bindParam(":types", $type);
+
+        if ($ps->execute())
+            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
+}
 
 //move_uploaded_file($_GET['img'], $_FILES[''])
 ?>
@@ -174,15 +183,21 @@ $nb = $req->execute();*/
                                             $name = basename($_FILES["image"]["name"][$key]);
                                             //PROBLEME de droit le dossier de sauvegarde qui est img n'accepte pas la sauvegarde
                                             var_dump(is_writable($uploads_dir));
+                                            echo $uploads_dir;
+                                            //chmod() pour le changement de droit
+                                            if (chmod($uploads_dir, 0755)) {
+                                                echo 'Permissions du fichier bien modifiées';
+                                                echo var_dump(is_writable($uploads_dir));
+                                            }
                                             move_uploaded_file($tmp_name, "$uploads_dir/$name");
                                         }
                                     }
-                                    $nbImage = count($_FILES["image"]["name"]);
+                                   /* $nbImage = count($_FILES["image"]["name"]);
                                     for ($i = 0; $i < $nbImage; $i++) {
                                         $name = $_FILES["image"]["name"][$i];
                                         echo " ";
                                         echo $name;
-                                    }
+                                    }*/
 
                                     //var_dump($_FILES["image"]["name"]);
                                     //<image src="assets/<?php echo $img; ></image>
