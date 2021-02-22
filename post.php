@@ -141,9 +141,16 @@ $uploads_dir = 'assets/uploads';
                                             // basename() peut empêcher les attaques de système de fichiers;
                                             // la validation/assainissement supplémentaire du nom de fichier peut être approprié
                                             $name = basename($_FILES["image"]["name"][$key]);
-                                            move_uploaded_file($tmp_name, "$uploads_dir/$name");
-                                            addImage($_FILES["image"]["name"][$key], $_FILES["image"]["type"][$key]);
-                                            addText($textePost);
+                                            if ($_FILES["image"]["size"][$key] > 3000000){
+                                                echo "l'image est trop grande";
+                                            }
+                                            else {
+                                                move_uploaded_file($tmp_name, "$uploads_dir/$name");
+                                                if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK){
+                                                    addImage($_FILES["image"]["name"][$key], $_FILES["image"]["type"][$key]);
+                                                }
+                                                addText($textePost);
+                                            }
                                         }
                                     }
 

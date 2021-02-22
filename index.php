@@ -78,7 +78,7 @@ require "functions_inc.php";
                                     </div>
                                 </div>
                             </form>
-                            <ul class="nav navbar-nav">
+                            <ul class="nav navbar-nav ml-5">
                                 <li>
                                     <a href="index.php"><i class="glyphicon glyphicon-home"></i> Home</a>
                                 </li>
@@ -118,17 +118,21 @@ require "functions_inc.php";
                                         </div>
                                     </div>
                                     <?php 
-                                    $image = showImage();
-                                    echo  $image();
-                                    /*foreach ($image as showImage())
-                                    {
-
-                                        echo "   <div class=\"panel panel-default\">
-                                        <div class=\"panel-thumbnail\"><img src=\"assets/img/welcome-image.png\" class=\"img-responsive\"></div>
-                                        <div class=\"panel-body\">
-                                        </div>
-                                        </div>"
-                                    }*/
+                                    $images = showImage();
+                                    $texts = showText();
+                                    foreach ($texts as $text){
+                                        foreach ($images as $image)
+                                        {
+                                            echo "   <div class=\"panel panel-default\">
+                                            <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$image["nomFichierMedia"]."\" class=\"img-responsive\"></div>
+                                            <div class=\"panel-body\">";
+                                          
+                                        }
+                                        echo "<p class=\"lead\">".$text["commentaire"]."</p>
+                                             </div>
+                                             </div>";
+                                    }
+                                
                                     ?>
 
                                     <div class="panel panel-default">
@@ -141,21 +145,6 @@ require "functions_inc.php";
                                                 <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
                                             </p>
                                         </div>
-                                    </div>
-
-                                    <div class="well">
-                                        <form class="form-horizontal" role="form">
-                                            <h4>What's New</h4>
-                                            <div class="form-group" style="padding:14px;">
-                                                <textarea class="form-control" placeholder="Update your status"></textarea>
-                                            </div>
-                                            <button class="btn btn-primary pull-right" type="button">Post</button>
-                                            <ul class="list-inline">
-                                                <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
-                                                <li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li>
-                                                <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li>
-                                            </ul>
-                                        </form>
                                     </div>
 
                                 </div>
@@ -212,16 +201,7 @@ require "functions_inc.php";
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <div>
-                        <button class="btn btn-primary btn-sm" data-dismiss="modal" aria-hidden="true">Post</button>
-                        <ul class="pull-left list-inline">
-                            <li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li>
-                            <li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li>
-                            <li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>

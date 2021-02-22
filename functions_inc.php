@@ -22,11 +22,28 @@ function addText($commentaire)
     return $answer;
 }
 
+function showText()
+{
+    static $ps = null;
+    $sql = 'SELECT commentaire, idPost FROM post';
+
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
+        if ($ps->execute())
+            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
+}
 
 function showImage()
 {
     static $ps = null;
-    $sql = 'SELECT nomFichierMedia FROM media';
+    $sql = 'SELECT media.nomFichierMedia FROM media, post WHERE post.idPost = media.idPost';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
