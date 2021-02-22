@@ -114,6 +114,19 @@ Date : 25.01.2021
                                         <div class="panel-body">
                                         </div>
                                     </div>
+                                    <?php 
+                                    /*foreach ($image as showImage())
+                                    {
+
+                                        echo "   <div class=\"panel panel-default\">
+                                        <div class=\"panel-thumbnail\"><img src=\"assets/img/welcome-image.png\" class=\"img-responsive\"></div>
+                                        <div class=\"panel-body\">
+                                        </div>
+                                        </div>"
+                                    }*/
+                                       
+
+                                    ?>
 
                                     <div class="panel panel-default">
                                         <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>

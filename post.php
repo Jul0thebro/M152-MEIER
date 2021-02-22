@@ -5,10 +5,11 @@ Description :
 Version : v1.0
 Date : 25.01.2021
 */
-require "pdo-connexion.php";
+require "functions_inc.php";
 
 //Variables
 $img = filter_input(INPUT_GET, 'image', FILTER_SANITIZE_STRING);
+$textePost = filter_input(INPUT_POST, 'textePost', FILTER_SANITIZE_STRING);
 $uploads_dir = 'assets/uploads';
 
 
@@ -123,7 +124,7 @@ $uploads_dir = 'assets/uploads';
                                             <h4>Poster</h4>
                                             <div class="form-group" style="padding:14px;">
                                                 <!-- Pour le texte -->
-                                                <textarea class="form-control" placeholder="Poster un message ..."></textarea>
+                                                <textarea class="form-control" name="textePost" placeholder="Poster un message ..."></textarea>
                                             </div>
                                             <!-- Envois les données -->
                                             <button class="btn btn-primary pull-right" type="submit">Post</button>
@@ -140,38 +141,15 @@ $uploads_dir = 'assets/uploads';
                                             // basename() peut empêcher les attaques de système de fichiers;
                                             // la validation/assainissement supplémentaire du nom de fichier peut être approprié
                                             $name = basename($_FILES["image"]["name"][$key]);
-                                            //PROBLEME de droit le dossier de sauvegarde qui est img n'accepte pas la sauvegarde
-                                            var_dump(is_writable($uploads_dir));
-                                            echo $uploads_dir;
-                                            //chmod() pour le changement de droit
-                                           /* if (chmod("$uploads_dir", 0755)) {
-                                                echo 'Permissions du fichier bien modifiées';
-                                                echo var_dump(is_writable($uploads_dir));
-                                            }*/
                                             move_uploaded_file($tmp_name, "$uploads_dir/$name");
+                                            addImage($_FILES["image"]["name"][$key], $_FILES["image"]["type"][$key]);
+                                            addText($textePost);
                                         }
                                     }
-                                   /* $nbImage = count($_FILES["image"]["name"]);
-                                    for ($i = 0; $i < $nbImage; $i++) {
-                                        $name = $_FILES["image"]["name"][$i];
-                                        echo " ";
-                                        echo $name;
-                                    }*/
 
                                     //var_dump($_FILES["image"]["name"]);
                                     //<image src="assets/<?php echo $img; ></image>
                                     ?>
-
-
-                                    <!--
-                                    <div class="well mt-5 pb-5">
-                                        <form method="POST" action="#" enctype="multipart/form-data">
-                                        
-                                            <input type="file" multiple accept="image/*" name="image[]">
-                                            <textarea></textarea>
-                                            <button class="btn btn-primary pull-right" type="submit">Post</button>
-                                        </form>
-                                    </div> -->
                                 </div>
                             </div>
                             <!--/row-->

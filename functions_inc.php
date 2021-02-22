@@ -5,7 +5,7 @@ require "pdo-connexion.php";
 function addText($commentaire)
 {
     static $ps = null;
-    $sql = 'INSERT INTO post(commentaire, typeMedia) VALUES(:commentaire)';
+    $sql = 'INSERT INTO post(commentaire) VALUES(:commentaire)';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
@@ -14,6 +14,25 @@ function addText($commentaire)
     try {
         $ps->bindParam(":commentaire", $commentaire);
 
+        if ($ps->execute())
+            $answer = $ps->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
+}
+
+
+function showImage()
+{
+    static $ps = null;
+    $sql = 'SELECT * FROM media';
+
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
         if ($ps->execute())
             $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
