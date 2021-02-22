@@ -5,6 +5,9 @@ Description :
 Version : v1.0
 Date : 25.01.2021
 */
+
+require "functions_inc.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,6 +118,8 @@ Date : 25.01.2021
                                         </div>
                                     </div>
                                     <?php 
+                                    $image = showImage();
+                                    echo  $image();
                                     /*foreach ($image as showImage())
                                     {
 
@@ -124,8 +129,6 @@ Date : 25.01.2021
                                         </div>
                                         </div>"
                                     }*/
-                                       
-
                                     ?>
 
                                     <div class="panel panel-default">

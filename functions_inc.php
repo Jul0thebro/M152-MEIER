@@ -26,7 +26,7 @@ function addText($commentaire)
 function showImage()
 {
     static $ps = null;
-    $sql = 'SELECT * FROM media';
+    $sql = 'SELECT nomFichierMedia FROM media';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
