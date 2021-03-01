@@ -2,7 +2,7 @@
 <?php 
 require "pdo-connexion.php";
 
-function showText()
+function showPost()
 {
     static $ps = null;
     $sql = 'SELECT commentaire, idPost FROM post';

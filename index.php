@@ -119,7 +119,7 @@ require "functions_inc.php";
                                     </div>
                                     <?php 
                                     $images = showImage();
-                                    $texts = showText();
+                                    $texts = showPost();
                                     foreach ($texts as $text){
                                         foreach ($images as $image)
                                         {
