@@ -124,7 +124,7 @@ $uploads_dir = 'assets/uploads';
                                             <h4>Poster</h4>
                                             <div class="form-group" style="padding:14px;">
                                                 <!-- Pour le texte -->
-                                                <textarea class="form-control" name="textePost" placeholder="Poster un message ..."></textarea>
+                                                <textarea class="form-control" name="textePost" required placeholder="Poster un message ..."></textarea>
                                             </div>
                                             <!-- Envois les données -->
                                             <button class="btn btn-primary pull-right" type="submit">Post</button>
@@ -134,37 +134,35 @@ $uploads_dir = 'assets/uploads';
                                     </div>
 
                                     <?php
+                                    $random = uniqid();
                                     //Va nous permettre de download les fichiers upload
                                     foreach ($_FILES["image"]["error"] as $key => $error) {
-                                        if ($error == UPLOAD_ERR_OK) {
-                                            $tmp_name = $_FILES["image"]["tmp_name"][$key];
-                                            // basename() peut empêcher les attaques de système de fichiers;
-                                            // la validation/assainissement supplémentaire du nom de fichier peut être approprié
-                                            $name = basename($_FILES["image"]["name"][$key]);
-                                            if ($_FILES["image"]["size"][$key] > 3000000){
-                                                echo "l'image est trop grande";
-                                            }
-                                            else {
-                                                move_uploaded_file($tmp_name, "$uploads_dir/$name");
-                                                if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK){
-                                                    addImage($_FILES["image"]["name"][$key], $_FILES["image"]["type"][$key]);
+                                        //vérifie si la taille du fichier n'est pas trop grande 
+                                        if ($_FILES["image"]["size"][$key] < 3000000 && strpos($_FILES["image"]["type"][$key], "image") === 0) {
+                                            if ($error == UPLOAD_ERR_OK) {
+                                                $tmp_name = $_FILES["image"]["tmp_name"][$key];
+                                                // basename() peut empêcher les attaques de système de fichiers;
+                                                // la validation/assainissement supplémentaire du nom de fichier peut être approprié
+                                                $name = basename($_FILES["image"]["name"][$key]);
+                                                $name = explode(".", $name);
+                                                //upload l'image dans le dossier uploads
+                                                move_uploaded_file($tmp_name, "$uploads_dir/".$name[0].$random.".".$name[1]);
+                                                //vérifie que l'image soit bien upload avant de l'ajouter à la base de données
+                                                if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && move_uploaded_file($tmp_name, "$uploads_dir/$name") == false) {
+                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key]);
+                                                    addText($textePost);
                                                 }
-                                                addText($textePost);
                                             }
+                                        } else {
+                                            echo "l'image est trop grande ou du mauvais type !<br/>";
                                         }
                                     }
-
-                                    //var_dump($_FILES["image"]["name"]);
-                                    //<image src="assets/<?php echo $img; ></image>
                                     ?>
                                 </div>
                             </div>
-                            <!--/row-->
-                        </div><!-- /col-9 -->
-                    </div><!-- /padding -->
+                        </div>
+                    </div>
                 </div>
-                <!-- /main -->
-
             </div>
         </div>
     </div>
