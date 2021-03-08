@@ -5,7 +5,7 @@ require "pdo-connexion.php";
 function showPost()
 {
     static $ps = null;
-    $sql = 'SELECT commentaire, idPost FROM post';
+    $sql = 'SELECT post.commentaire, post.idPost, post.DateDeCreation, media.nomFichierMedia FROM post, media WHERE post.idPost = media.idPost';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
@@ -20,7 +20,7 @@ function showPost()
     return $answer;
 }
 
-function showImage()
+/*function showImage()
 {
     static $ps = null;
     $sql = 'SELECT media.nomFichierMedia FROM media, post WHERE post.idPost = media.idPost';
@@ -36,12 +36,12 @@ function showImage()
         echo $e->getMessage();
     }
     return $answer;
-}
+}*/
 
-function addImage($nom, $type)
+function addImage($nom, $type, $idPost)
 {
     static $ps = null;
-    $sql = 'INSERT INTO media(nomFichierMedia, typeMedia) VALUES(:nom, :types)';
+    $sql = 'INSERT INTO media(nomFichierMedia, typeMedia, idPost) VALUES(:nom, :types, :IDPOST)';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
@@ -49,10 +49,28 @@ function addImage($nom, $type)
     try {
         $ps->bindParam(":nom", $nom);
         $ps->bindParam(":types", $type);
+        $ps->bindParam(":IDPOST", $idPost);
         return $ps->execute();
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+}
+
+function takeLastPostId(){
+    static $ps = null;
+    $sql = 'SELECT idPost FROM post WHERE MAX(idPost)';
+
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
+        if ($ps->execute())
+            $answer = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
 }
 
 function addText($commentaire)

@@ -1,4 +1,4 @@
-<?php
+    <?php
 /*
 Auteur : Julian Meier
 Description : 
@@ -118,21 +118,19 @@ require "functions_inc.php";
                                         </div>
                                     </div>
                                     <?php 
-                                    $images = showImage();
+                                    
                                     $texts = showPost();
+                                    //Va permettre d'afficher les posts 
                                     foreach ($texts as $text){
-                                        foreach ($images as $image)
-                                        {
-                                            echo "   <div class=\"panel panel-default\">
-                                            <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$image["nomFichierMedia"]."\" class=\"img-responsive\"></div>
-                                            <div class=\"panel-body\">";
+                                        echo "   <div class=\"panel panel-default\">
+                                        <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$text["nomFichierMedia"]."\" class=\"img-responsive\"></div>
+                                        <div class=\"panel-body\">";
                                           
-                                        }
                                         echo "<p class=\"lead\">".$text["commentaire"]."</p>
-                                             </div>
-                                             </div>";
+                                              <p class=\"lead\" style=\"float: right;\">Date : ".$text["DateDeCreation"]."</p>
+                                              </div>
+                                              </div>";
                                     }
-                                
                                     ?>
 
                                     <div class="panel panel-default">

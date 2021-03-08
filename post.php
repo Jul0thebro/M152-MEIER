@@ -146,11 +146,12 @@ $uploads_dir = 'assets/uploads';
                                                 $name = basename($_FILES["image"]["name"][$key]);
                                                 $name = explode(".", $name);
                                                 //upload l'image dans le dossier uploads
-                                                move_uploaded_file($tmp_name, "$uploads_dir/".$name[0].$random.".".$name[1]);
+                                                $verif = move_uploaded_file($tmp_name, "$uploads_dir/".$name[0].$random.".".$name[1]);
                                                 //vérifie que l'image soit bien upload avant de l'ajouter à la base de données
-                                                if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && move_uploaded_file($tmp_name, "$uploads_dir/$name") == false) {
-                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key]);
+                                                if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && $verif) {
                                                     addText($textePost);
+                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key], takeLastPostId());
+
                                                 }
                                             }
                                         } else {
