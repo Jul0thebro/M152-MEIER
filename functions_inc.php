@@ -1,6 +1,17 @@
 
 <?php 
 require "pdo-connexion.php";
+function startTransaction(){
+    return dbM152()->beginTransaction();
+}
+function confirmTransaction(){
+    return dbM152()->commit();
+}
+function StopTransaction(){
+    return dbM152()->rollBack();
+}
+
+
 
 function showPost()
 {

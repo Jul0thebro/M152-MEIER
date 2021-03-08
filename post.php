@@ -146,13 +146,23 @@ $uploads_dir = 'assets/uploads';
                                                 $name = basename($_FILES["image"]["name"][$key]);
                                                 $name = explode(".", $name);
                                                 //upload l'image dans le dossier uploads
-                                                $verif = move_uploaded_file($tmp_name, "$uploads_dir/".$name[0].$random.".".$name[1]);
+                                                $verif = move_uploaded_file($tmp_name, "$uploads_dir/" . $name[0] . $random . "." . $name[1]);
                                                 //vérifie que l'image soit bien upload avant de l'ajouter à la base de données
                                                 if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && $verif) {
+                                                    //Commence la transaction
+                                                    startTransaction();
                                                     addText($textePost);
+                                                    //Permet de récuperer le dernier id qui est celui du post
                                                     $idPost = takeLastPostId();
-                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]);
-
+                                                    addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]);
+                                                    if (addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]) == false) {
+                                                        unlink($uploads_dir . $name[0] . $random . $name[1]);
+                                                        // Annule la transaction avec le post
+                                                        StopTransaction();
+                                                    } else {
+                                                        //Confirme la transaction si il y n'y a pas eu d'erreurs
+                                                        confirmTransaction();
+                                                    }
                                                 }
                                             }
                                         } else {
@@ -171,7 +181,7 @@ $uploads_dir = 'assets/uploads';
 
 
     <!--post modal-->
-    <div id="postModal" class="modal fade mt-5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="postModal" class="modal fade mt-5" tabindex="-1" role="dialog" aria-hidden="true">é
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
