@@ -150,7 +150,8 @@ $uploads_dir = 'assets/uploads';
                                                 //vérifie que l'image soit bien upload avant de l'ajouter à la base de données
                                                 if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && $verif) {
                                                     addText($textePost);
-                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key], takeLastPostId());
+                                                    $idPost = takeLastPostId();
+                                                    addImage($name[0].$random.".".$name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]);
 
                                                 }
                                             }

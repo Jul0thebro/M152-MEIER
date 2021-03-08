@@ -58,7 +58,7 @@ function addImage($nom, $type, $idPost)
 
 function takeLastPostId(){
     static $ps = null;
-    $sql = 'SELECT idPost FROM post WHERE MAX(idPost)';
+    $sql = 'SELECT MAX(idPost) FROM post';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
