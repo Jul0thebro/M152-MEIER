@@ -122,11 +122,26 @@ require "functions_inc.php";
                                     $texts = showPost();
                                     //Va permettre d'afficher les posts 
                                     foreach ($texts as $text){
-                                        echo "   <div class=\"panel panel-default\">
-                                        <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$text["nomFichierMedia"]."\" class=\"img-responsive\"></div>
-                                        <div class=\"panel-body\">";
+                                        $verifImgVidAud = explode(".",$text["nomFichierMedia"]);
+                                        if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg"){
+                                            echo "   <div class=\"panel panel-default\">
+                                            <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$text["nomFichierMedia"]."\" class=\"img-responsive\"></div>
+                                            <div class=\"panel-body\">";
+                                        }
+                                        else if ($verifImgVidAud[1] == "mp4"){
+                                            echo "   <div class=\"panel panel-default\">
+                                            <div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/".$text["nomFichierMedia"]."\" type=\"video/mp4\"> </video></div>
+                                            <div class=\"panel-body\">";
+                                        }
+                                        else if ($verifImgVidAud[1] == "mp3"){
+                                            echo "   <div class=\"panel panel-default\">
+                                            <div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/".$text["nomFichierMedia"]."\" type=\"audio/mp3\"> </audio></div>
+                                            <div class=\"panel-body\">";
+                                        }
+
+                                       
                                           
-                                        echo "<p class=\"lead\">".$text["commentaire"]."</p>
+                                        echo "<p class=\"lead\">".$text["commentaire"]."        <button type=\"button\" class=\"btn btn-primary\">📝</button> <button type=\"button\" class=\"btn btn-primary\">❌</button></p>
                                               <p class=\"lead\" style=\"float: right;\">Date : ".$text["DateDeCreation"]."</p>
                                               </div>
                                               </div>";

@@ -129,7 +129,7 @@ $uploads_dir = 'assets/uploads';
                                             <!-- Envois les données -->
                                             <button class="btn btn-primary pull-right" type="submit">Post</button>
                                             <!-- Pour les images -->
-                                            <input type="file" multiple accept="image/*" name="image[]">
+                                            <input type="file" multiple accept="image/*,video/*,audio/*" name="image[]">
                                         </form>
                                     </div>
 
@@ -137,8 +137,8 @@ $uploads_dir = 'assets/uploads';
                                     $random = uniqid();
                                     //Va nous permettre de download les fichiers upload
                                     foreach ($_FILES["image"]["error"] as $key => $error) {
-                                        //vérifie si la taille du fichier n'est pas trop grande 
-                                        if ($_FILES["image"]["size"][$key] < 3000000 && strpos($_FILES["image"]["type"][$key], "image") === 0) {
+                                        //vérifie si la taille du fichier n'est pas trop grande et que l'extension est bonne
+                                        if ($_FILES["image"]["size"][$key] < 9000000 && (strpos($_FILES["image"]["type"][$key], "image") === 0 || strpos($_FILES["image"]["type"][$key], "video") === 0 || strpos($_FILES["image"]["type"][$key], "audio") === 0)) {
                                             if ($error == UPLOAD_ERR_OK) {
                                                 $tmp_name = $_FILES["image"]["tmp_name"][$key];
                                                 // basename() peut empêcher les attaques de système de fichiers;
@@ -155,9 +155,9 @@ $uploads_dir = 'assets/uploads';
                                                     //Permet de récuperer le dernier id qui est celui du post
                                                     $idPost = takeLastPostId();
                                                     addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]);
-                                                    if (addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]) == false) {
+                                                    if (addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]) == false || $textePost == null) {
                                                         unlink($uploads_dir . $name[0] . $random . $name[1]);
-                                                        // Annule la transaction avec le post
+                                                        // Annule la transaction avec le post 
                                                         StopTransaction();
                                                     } else {
                                                         //Confirme la transaction si il y n'y a pas eu d'erreurs
