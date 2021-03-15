@@ -136,6 +136,7 @@ $uploads_dir = 'assets/uploads';
                                     <?php
                                     $random = uniqid();
                                     //Va nous permettre de download les fichiers upload
+                                    addText($textePost);
                                     foreach ($_FILES["image"]["error"] as $key => $error) {
                                         //vérifie si la taille du fichier n'est pas trop grande et que l'extension est bonne
                                         if ($_FILES["image"]["size"][$key] < 9000000 && (strpos($_FILES["image"]["type"][$key], "image") === 0 || strpos($_FILES["image"]["type"][$key], "video") === 0 || strpos($_FILES["image"]["type"][$key], "audio") === 0)) {
@@ -151,10 +152,8 @@ $uploads_dir = 'assets/uploads';
                                                 if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && $verif) {
                                                     //Commence la transaction
                                                     startTransaction();
-                                                    addText($textePost);
                                                     //Permet de récuperer le dernier id qui est celui du post
                                                     $idPost = takeLastPostId();
-                                                    addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]);
                                                     if (addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]) == false || $textePost == null) {
                                                         unlink($uploads_dir . $name[0] . $random . $name[1]);
                                                         // Annule la transaction avec le post 

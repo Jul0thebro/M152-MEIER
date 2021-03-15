@@ -120,28 +120,24 @@ require "functions_inc.php";
                                     <?php 
                                     
                                     $texts = showPost();
-                                    //Va permettre d'afficher les posts 
+                              
+                                    //Va permettre d'afficher les posts
                                     foreach ($texts as $text){
-                                        $verifImgVidAud = explode(".",$text["nomFichierMedia"]);
-                                        if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg"){
-                                            echo "   <div class=\"panel panel-default\">
-                                            <div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$text["nomFichierMedia"]."\" class=\"img-responsive\"></div>
-                                            <div class=\"panel-body\">";
+                                        echo "   <div class=\"panel panel-default\">";
+                                        $medias = recupMedia($text["idPost"]);
+                                        foreach($medias as $media){
+                                            $verifImgVidAud = explode(".",$media["nomFichierMedia"]);
+                                            if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg" || $verifImgVidAud[1] == "jpeg"){
+                                                echo "<div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$media["nomFichierMedia"]."\" class=\"img-responsive\"></div>";
+                                            }
+                                            else if ($verifImgVidAud[1] == "mp4"){
+                                                echo "<div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/".$media["nomFichierMedia"]."\" type=\"video/mp4\"> </video></div>";
+                                            }
+                                            else if ($verifImgVidAud[1] == "mp3"){
+                                                echo "<div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/".$media["nomFichierMedia"]."\" type=\"audio/mp3\"> </audio></div>";
+                                            }
                                         }
-                                        else if ($verifImgVidAud[1] == "mp4"){
-                                            echo "   <div class=\"panel panel-default\">
-                                            <div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/".$text["nomFichierMedia"]."\" type=\"video/mp4\"> </video></div>
-                                            <div class=\"panel-body\">";
-                                        }
-                                        else if ($verifImgVidAud[1] == "mp3"){
-                                            echo "   <div class=\"panel panel-default\">
-                                            <div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/".$text["nomFichierMedia"]."\" type=\"audio/mp3\"> </audio></div>
-                                            <div class=\"panel-body\">";
-                                        }
-
-                                       
-                                          
-                                        echo "<p class=\"lead\">".$text["commentaire"]."        <button type=\"button\" class=\"btn btn-primary\">📝</button> <button type=\"button\" class=\"btn btn-primary\">❌</button></p>
+                                        echo "<div class=\"panel-body\"><p class=\"lead\">".$text["commentaire"]."<button type=\"button\" class=\"btn btn-primary\">📝</button> <button type=\"button\" class=\"btn btn-primary\">❌</button></p>
                                               <p class=\"lead\" style=\"float: right;\">Date : ".$text["DateDeCreation"]."</p>
                                               </div>
                                               </div>";
