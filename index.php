@@ -127,7 +127,7 @@ require "functions_inc.php";
                                         $medias = recupMedia($text["idPost"]);
                                         foreach($medias as $media){
                                             $verifImgVidAud = explode(".",$media["nomFichierMedia"]);
-                                            if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg" || $verifImgVidAud[1] == "jpeg"){
+                                            if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg" || $verifImgVidAud[1] == "jpeg" || $verifImgVidAud[1] == "PNG" || $verifImgVidAud[1] == "JPG" || $verifImgVidAud[1] == "JPEG"){
                                                 echo "<div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$media["nomFichierMedia"]."\" class=\"img-responsive\"></div>";
                                             }
                                             else if ($verifImgVidAud[1] == "mp4"){
@@ -137,8 +137,31 @@ require "functions_inc.php";
                                                 echo "<div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/".$media["nomFichierMedia"]."\" type=\"audio/mp3\"> </audio></div>";
                                             }
                                         }
-                                        echo "<div class=\"panel-body\"><p class=\"lead\">".$text["commentaire"]."<button type=\"button\" class=\"btn btn-primary\">📝</button> <button type=\"button\" class=\"btn btn-primary\">❌</button></p>
+                                        // manque lien js pour la modal
+                                        echo "<div class=\"panel-body\"><p class=\"lead\">".$text["commentaire"]."
+                                              <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteModal\">
+                                              ❌
+                                              </button>
                                               <p class=\"lead\" style=\"float: right;\">Date : ".$text["DateDeCreation"]."</p>
+                                              
+                                              <div class=\"modal fade\" id=\"deleteModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">
+                                                <div class=\"modal-dialog\">
+                                                    <div class=\"modal-content\">
+                                                    <div class=\"modal-header\">
+                                                        <h5 class=\"modal-title\" id=\"exampleModalLabel\">Modal title</h5>
+                                                        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
+                                                    </div>
+                                                    <div class=\"modal-body\">
+                                                        ...
+                                                    </div>
+                                                    <div class=\"modal-footer\">
+                                                        <a href=\"index.php\" data-bs-dismiss=\"modal\" class=\"btn btn-primary\" role=\"button\" data-bs-toggle=\"button\">Annuler</a>
+                                                        <a href=\"index.php?id=".$text["idPost"]."\" class=\"btn btn-primary\" role=\"button\" data-bs-toggle=\"button\">Supprimer</a>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+
                                               </div>
                                               </div>";
                                     }

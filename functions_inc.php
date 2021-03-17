@@ -13,22 +13,20 @@ function StopTransaction(){
 
 
 
-/*function deleteImage(){
+function deletePost($id){
     static $ps = null;
-    $sql = 'DELETE FROM media(nomFichierMedia, typeMedia, idPost) VALUES(:nom, :types, :IDPOST)';
+    $sql = 'DELETE FROM post WHERE idPost = :id';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);
     }
     try {
-        $ps->bindParam(":nom", $nom);
-        $ps->bindParam(":types", $type);
-        $ps->bindParam(":IDPOST", $idPost);
+        $ps->bindParam(":id", $id);
         return $ps->execute();
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-}*/
+}
 
 function showPost()
 {

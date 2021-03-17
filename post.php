@@ -136,7 +136,9 @@ $uploads_dir = 'assets/uploads';
                                     <?php
                                     $random = uniqid();
                                     //Va nous permettre de download les fichiers upload
-                                    addText($textePost);
+                                    if ($textePost != null){
+                                        addText($textePost);
+                                    }
                                     foreach ($_FILES["image"]["error"] as $key => $error) {
                                         //vérifie si la taille du fichier n'est pas trop grande et que l'extension est bonne
                                         if ($_FILES["image"]["size"][$key] < 9000000 && (strpos($_FILES["image"]["type"][$key], "image") === 0 || strpos($_FILES["image"]["type"][$key], "video") === 0 || strpos($_FILES["image"]["type"][$key], "audio") === 0)) {
@@ -159,7 +161,7 @@ $uploads_dir = 'assets/uploads';
                                                         // Annule la transaction avec le post 
                                                         StopTransaction();
                                                     } else {
-                                                        //Confirme la transaction si il y n'y a pas eu d'erreurs
+                                                        // Confirme la transaction si il y n'y a pas eu d'erreurs
                                                         confirmTransaction();
                                                     }
                                                 }
