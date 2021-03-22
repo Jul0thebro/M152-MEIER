@@ -46,10 +46,28 @@ function showPost()
     return $answer;
 }
 
+function recupText($idPost){
+    static $ps = null;
+    $sql = 'SELECT commentaire FROM post WHERE post.idPost = :ID';
+
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    $answer = false;
+    try {
+        $ps->bindParam(":ID", $idPost);
+        if ($ps->execute())
+            $answer = $ps->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    return $answer;
+}
+
 function recupMedia($idPost)
 {
     static $ps = null;
-    $sql = 'SELECT media.nomFichierMedia, media.typeMedia FROM media WHERE media.idPost = :ID';
+    $sql = 'SELECT nomFichierMedia, typeMedia FROM media WHERE idPost = :ID';
 
     if ($ps == null) {
         $ps = dbM152()->prepare($sql);

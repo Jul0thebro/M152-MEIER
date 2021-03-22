@@ -17,7 +17,7 @@ require "functions_inc.php";
     <title>Meier-Site-Publication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -25,8 +25,8 @@ require "functions_inc.php";
 </head>
 
 <body>
-
     <div class="wrapper">
+    
         <div class="box">
             <div class="row row-offcanvas row-offcanvas-left">
 
@@ -127,40 +127,22 @@ require "functions_inc.php";
                                         $medias = recupMedia($text["idPost"]);
                                         foreach($medias as $media){
                                             $verifImgVidAud = explode(".",$media["nomFichierMedia"]);
-                                            if ($verifImgVidAud[1] == "png" || $verifImgVidAud[1] == "jpg" || $verifImgVidAud[1] == "jpeg" || $verifImgVidAud[1] == "PNG" || $verifImgVidAud[1] == "JPG" || $verifImgVidAud[1] == "JPEG"){
+                                            if (strpos($media["typeMedia"], "image") === 0){
                                                 echo "<div class=\"panel-thumbnail\"><img src=\"assets/uploads/".$media["nomFichierMedia"]."\" class=\"img-responsive\"></div>";
                                             }
-                                            else if ($verifImgVidAud[1] == "mp4"){
+                                            else if (strpos($media["typeMedia"], "video") === 0){
                                                 echo "<div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/".$media["nomFichierMedia"]."\" type=\"video/mp4\"> </video></div>";
                                             }
-                                            else if ($verifImgVidAud[1] == "mp3"){
+                                            else if (strpos($media["typeMedia"], "audio") === 0){
                                                 echo "<div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/".$media["nomFichierMedia"]."\" type=\"audio/mp3\"> </audio></div>";
                                             }
                                         }
+
                                         // manque lien js pour la modal
                                         echo "<div class=\"panel-body\"><p class=\"lead\">".$text["commentaire"]."
-                                              <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteModal\">
-                                              ❌
-                                              </button>
+                                              <a href=\"modifier.php?id=".$text["idPost"]."\" class=\"btn btn-primary\"><i class=\"fas fa-pen\"></i></a>
+                                              <a href=\"supprimer.php?id=".$text["idPost"]."\" class=\"btn btn-primary\"><i class=\"fas fa-times\"></i></i></a>
                                               <p class=\"lead\" style=\"float: right;\">Date : ".$text["DateDeCreation"]."</p>
-                                              
-                                              <div class=\"modal fade\" id=\"deleteModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">
-                                                <div class=\"modal-dialog\">
-                                                    <div class=\"modal-content\">
-                                                    <div class=\"modal-header\">
-                                                        <h5 class=\"modal-title\" id=\"exampleModalLabel\">Modal title</h5>
-                                                        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
-                                                    </div>
-                                                    <div class=\"modal-body\">
-                                                        ...
-                                                    </div>
-                                                    <div class=\"modal-footer\">
-                                                        <a href=\"index.php\" data-bs-dismiss=\"modal\" class=\"btn btn-primary\" role=\"button\" data-bs-toggle=\"button\">Annuler</a>
-                                                        <a href=\"index.php?id=".$text["idPost"]."\" class=\"btn btn-primary\" role=\"button\" data-bs-toggle=\"button\">Supprimer</a>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                </div>
 
                                               </div>
                                               </div>";
@@ -239,9 +221,10 @@ require "functions_inc.php";
     </div>
 
     <script type="text/javascript" src="assets/js/jquery.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/296a36043d.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="assets/js/bootstrap.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
