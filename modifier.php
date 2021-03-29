@@ -9,6 +9,8 @@ $random = uniqid();
 if ($textePost != null) {
     addText($textePost);
 }
+
+//il faut mettre l'id du bon post 
 foreach ($_FILES["image"]["error"] as $key => $error) {
     //vérifie si la taille du fichier n'est pas trop grande et que l'extension est bonne
     if ($_FILES["image"]["size"][$key] < 9000000 && (strpos($_FILES["image"]["type"][$key], "image") === 0 || strpos($_FILES["image"]["type"][$key], "video") === 0 || strpos($_FILES["image"]["type"][$key], "audio") === 0)) {
@@ -145,7 +147,7 @@ foreach ($_FILES["image"]["error"] as $key => $error) {
                                 <!-- main col left -->
                                 <div class="col-sm-5 mt-5">
 
-                                    <form action="modifPost.php" class="mt-5" method="POST">
+                                    <form action="modifPost.php?id=<?php echo $idPost?>" class="mt-5" method="POST">
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Texte du post</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $text["commentaire"]; ?>" aria-describedby="emailHelp">
@@ -158,10 +160,13 @@ foreach ($_FILES["image"]["error"] as $key => $error) {
                                                 $verifImgVidAud = explode(".", $media["nomFichierMedia"]);
                                                 if (strpos($media["typeMedia"], "image") === 0) {
                                                     echo "<div class=\"panel-thumbnail\"><img src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" class=\"img-responsive\"></div>";
+                                                    echo "<input type=\"checkbox\" value=". $media["nomFichierMedia"] . "\">";
                                                 } else if (strpos($media["typeMedia"], "video") === 0) {
                                                     echo "<div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" type=\"video/mp4\"> </video></div>";
+                                                    echo "<input type=\"checkbox\" value=". $media["nomFichierMedia"] . "\">";
                                                 } else if (strpos($media["typeMedia"], "audio") === 0) {
                                                     echo "<div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" type=\"audio/mp3\"> </audio></div>";
+                                                    echo "<input type=\"checkbox\" value=". $media["nomFichierMedia"] . "\">";
                                                 }
                                             }
                                             ?>
