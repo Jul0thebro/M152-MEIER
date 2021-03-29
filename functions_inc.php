@@ -133,3 +133,19 @@ function addText($commentaire)
         echo $e->getMessage();
     }
 }
+
+function ModifyPost($idPost, $commentaire){
+    static $ps = null;
+    $sql = 'UPDATE post SET commentaire = :commentaire WHERE idPost = :idPost';
+
+    if ($ps == null) {
+        $ps = dbM152()->prepare($sql);
+    }
+    try {
+        $ps->bindParam(":commentaire", $commentaire);
+        $ps->bindParam(":IDPOST", $idPost);
+        return $ps->execute();
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+}

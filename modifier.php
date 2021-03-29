@@ -2,7 +2,47 @@
 
 $idPost = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 require "functions_inc.php";
-$text = recupText($idPost)
+$text = recupText($idPost);
+
+$random = uniqid();
+//Va nous permettre de download les fichiers upload
+if ($textePost != null) {
+    addText($textePost);
+}
+foreach ($_FILES["image"]["error"] as $key => $error) {
+    //vérifie si la taille du fichier n'est pas trop grande et que l'extension est bonne
+    if ($_FILES["image"]["size"][$key] < 9000000 && (strpos($_FILES["image"]["type"][$key], "image") === 0 || strpos($_FILES["image"]["type"][$key], "video") === 0 || strpos($_FILES["image"]["type"][$key], "audio") === 0)) {
+        if ($error == UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES["image"]["tmp_name"][$key];
+            // basename() peut empêcher les attaques de système de fichiers;
+            // la validation/assainissement supplémentaire du nom de fichier peut être approprié
+            $name = basename($_FILES["image"]["name"][$key]);
+            $name = explode(".", $name);
+            //upload l'image dans le dossier uploads
+            $verif = move_uploaded_file($tmp_name, "$uploads_dir/" . $name[0] . $random . "." . $name[1]);
+            //vérifie que l'image soit bien upload avant de l'ajouter à la base de données
+            if ($_FILES["image"]["error"][$key] == UPLOAD_ERR_OK && $verif) {
+                //Commence la transaction
+                startTransaction();
+                //Permet de récuperer le dernier id qui est celui du post
+                $idPost = takeLastPostId();
+                if (addImage($name[0] . $random . "." . $name[1], $_FILES["image"]["type"][$key], $idPost[0]["MAX(idPost)"]) == false || $textePost == null) {
+                    unlink($uploads_dir . $name[0] . $random . $name[1]);
+                    // Annule la transaction avec le post 
+                    StopTransaction();
+                } else {
+                    // Confirme la transaction si il y n'y a pas eu d'erreurs
+                    confirmTransaction();
+                }
+            }
+        }
+    } else {
+        echo "l'image est trop grande ou du mauvais type !<br/>";
+    }
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,16 +145,34 @@ $text = recupText($idPost)
                                 <!-- main col left -->
                                 <div class="col-sm-5 mt-5">
 
-                                    <form action="index.php"class="mt-5" method="POST">
+                                    <form action="modifPost.php" class="mt-5" method="POST">
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Texte du post</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $text["commentaire"];?>" aria-describedby="emailHelp">
+                                            <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $text["commentaire"]; ?>" aria-describedby="emailHelp">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1" class="form-label">Médias : </label>
+                                            <?php
+                                            $medias = recupMedia($idPost);
+                                            foreach ($medias as $media) {
+                                                $verifImgVidAud = explode(".", $media["nomFichierMedia"]);
+                                                if (strpos($media["typeMedia"], "image") === 0) {
+                                                    echo "<div class=\"panel-thumbnail\"><img src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" class=\"img-responsive\"></div>";
+                                                } else if (strpos($media["typeMedia"], "video") === 0) {
+                                                    echo "<div class=\"panel-thumbnail\"><video width=\"320\" height=\"240\" autoplay muted loop> <source src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" type=\"video/mp4\"> </video></div>";
+                                                } else if (strpos($media["typeMedia"], "audio") === 0) {
+                                                    echo "<div class=\"panel-thumbnail\"><audio width=\"320\" height=\"240\" controls> <source src=\"assets/uploads/" . $media["nomFichierMedia"] . "\" type=\"audio/mp3\"> </audio></div>";
+                                                }
+                                            }
+                                            ?>
 
+                                            <div class="well mt-5">
+                                                    <h4>Rajouter des médias</h4>
+                                                    <!-- Pour les images -->
+                                                    <input type="file" multiple accept="image/*,video/*,audio/*" name="image[]">
+                                            </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Annuler</button>
+                                        <a class="btn btn-primary mb-1" href="index.php">Annuler</a>
                                         <button type="submit" class="btn btn-primary">Confirmer</button>
                                     </form>
 
